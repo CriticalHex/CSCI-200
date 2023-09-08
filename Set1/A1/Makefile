@@ -1,10 +1,7 @@
-# A line starting with a has is a comment, we'll build up
-# the below example
-
-TARGET = main.exe 
+TARGET = A1
 SRC_FILES = main.cpp
 
-# DO NOT EDIT BELOW HERE
+# keep
 CXX = g++
 CFLAGS = -Wall -g -Werror -std=c++11
 OBJECTS = $(SRC_FILES:.cpp=.o)
