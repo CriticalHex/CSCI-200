@@ -61,7 +61,8 @@ int add_five(int x) {
  * @returns random integer within the range [MIN, MAX]
  */
 int generate_random_integer(const int MIN, const int MAX) {
-    const int RANDOM = MIN + (rand() % (MAX - MIN));
+    const int RANDOM = MIN + (rand() % (MAX - MIN + 1));
+    // the +1 is to allow the max number to be generated
     return RANDOM;
 }
 
@@ -73,7 +74,7 @@ int generate_random_integer(const int MIN, const int MAX) {
  * @return random float within the range [MIN, MAX]
  */
 float generate_random_float(const float MIN, const float MAX) {
-    const float RANDOM = MIN + (rand() / (float)RAND_MAX) - (MAX - MIN);
+    const float RANDOM = MIN + (rand() / (float)RAND_MAX) * (MAX - MIN);
     return RANDOM;
 }
 
@@ -229,8 +230,12 @@ void loop_test_4() {
  * @brief runs test summing i^3 in the range [1, N]
  */
 void loop_test_5() {
-    // FIX =
-    // TESTS:
+    // FIX = increment counter in the loop, while counter is leq n.
+    /*TESTS:
+    1 -> 1 pass
+    2 -> 9 pass
+    3 -> 36 pass
+    */
 
     cout << endl;
     cout << "******************" << endl;
@@ -245,11 +250,10 @@ void loop_test_5() {
     cin >> n;
 
     int sum = 0, counter = 1;
-    while (counter < 10) {
+    while (counter <= n) {
         sum += (counter * counter * counter);
+        counter++;
     }
-
-    counter++;
 
     cout << "The sum of cubes from 1 to " << n << " is: " << sum << endl;
 }
@@ -259,7 +263,10 @@ void loop_test_5() {
  */
 void function_test_1() {
     // FIX: have add_five() return x
-    // TESTS:
+    /*TESTS:
+    1 -> 6 pass
+    5 -> 10 pass
+    */
 
     cout << endl;
     cout << "******************" << endl;
@@ -282,7 +289,7 @@ void function_test_1() {
  */
 void function_test_2() {
     // FIX = define printSmileyFace().
-    // TESTS: Outputs same thing every time
+    // TESTS: Outputs same thing every time -> pass
 
     cout << endl;
     cout << "******************" << endl;
@@ -296,8 +303,12 @@ void function_test_2() {
  * @brief runs test to generate five random integers within a provided range
  */
 void function_test_3() {
-    // FIX =
-    // TESTS:
+    // FIX = change generate_random_integer() to make use of the min and max
+    // parameters.
+    /*TESTS:
+    3,8 -> 5 rand between 3 and 8 including 3 and 8 pass
+    3,4 -> 5 numbers that are randomly 3 and 4 pass
+    */
 
     cout << endl;
     cout << "******************" << endl;
@@ -321,7 +332,11 @@ void function_test_3() {
  */
 void function_test_4() {
     // FIX = add num3 to the arguments for sum(), sum() uses all three params
-    // TESTS:
+    /*TESTS:
+     3 4 5 -> 12 pass
+     2 2 2 -> 6 pass
+     7 7 7 -> 21 pass
+     */
 
     cout << endl;
     cout << "******************" << endl;
@@ -338,8 +353,12 @@ void function_test_4() {
  * @brief runs test to generate five random floats within a provided range
  */
 void function_test_5() {
-    // FIX = actually call generate_random_float (added parens)
-    // TESTS:
+    // FIX = actually call generate_random_float (added parens), made said
+    // function make use of the max and min correctly
+    /*TESTS:
+    generated 100 random numbers keeping track of the highest and lowest values,
+    which were < 0.1 off from the max and min. (pass)
+    */
 
     cout << endl;
     cout << "******************" << endl;
@@ -361,8 +380,12 @@ void function_test_5() {
  * @brief runs test to use function to multiply two provided numbers
  */
 void function_test_6() {
-    // FIX =
-    // TESTS:
+    // FIX = define multiply to return the product of the parameters
+    /*TESTS:
+    3 3 -> 9 pass
+    3 5 -> 15 pass
+    3.3 4.5 -> 14.85 pass
+    */
 
     cout << endl;
     cout << "******************" << endl;
@@ -377,20 +400,21 @@ void function_test_6() {
 }
 
 int main() {
+    srand(time(NULL));  // random numbers need a seed
     cout << "Welcome To Looping Function World!" << endl;
 
-    // loop_test_1();  // run looping test 1
-    // loop_test_2();  // run looping test 2
-    // loop_test_3();  // run looping test 3
+    loop_test_1();  // run looping test 1
+    loop_test_2();  // run looping test 2
+    loop_test_3();  // run looping test 3
     loop_test_4();  // run looping test 4
-    // loop_test_5();  // run looping test 5
+    loop_test_5();  // run looping test 5
 
-    // function_test_1();  // run function test 1
-    // function_test_2();  // run function test 2
-    // function_test_3();  // run function test 3
-    // function_test_4();  // run function test 4
-    // function_test_5();  // run function test 5
-    // function_test_6();  // run function test 6
+    function_test_1();  // run function test 1
+    function_test_2();  // run function test 2
+    function_test_3();  // run function test 3
+    function_test_4();  // run function test 4
+    function_test_5();  // run function test 5
+    function_test_6();  // run function test 6
 
     cout << endl;
     cout << "******************" << endl;
