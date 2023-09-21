@@ -1,4 +1,4 @@
-/* CSCI 200: Fix Loop and Function Errors
+/* CSCI 200: Lab 2A: Fix Loop and Function Errors
  *
  * Author: Kyle Kubaska
  *
