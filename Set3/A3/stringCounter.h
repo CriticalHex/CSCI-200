@@ -5,7 +5,7 @@ class StringCounter {
 private:
   std::vector<std::string> allWords;
   std::vector<unsigned int> letterCounts;
-  unsigned int totalLetterCount;
+  unsigned int totalLetterCount = 0;
 
 public:
   StringCounter();
