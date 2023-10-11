@@ -2,7 +2,7 @@
 # the below example
 
 TARGET = A3
-SRC_FILES = main.cpp StringCounter.cpp StringFilter.cpp processor.cpp
+SRC_FILES = main.cpp algorithm.cpp StringCounter.cpp StringFilter.cpp processor.cpp
 
 # NO EDITS NEEDED BELOW THIS LINE
 
@@ -43,6 +43,7 @@ depend:
 
 # DEPENDENCIES
 main.o: main.cpp processor.h
+algorithm.o: algorithm.h
 StringCounter.o: StringCounter.cpp StringCounter.h
 StringFilter.o: StringFilter.cpp StringFilter.h
 processor.o: processor.cpp processor.h StringCounter.h StringFilter.h

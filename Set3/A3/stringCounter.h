@@ -1,17 +1,22 @@
+#ifndef STRINGCOUNTER_H
+#define STRINGCOUNTER_H
+
 #include <string>
 #include <vector>
 
 class StringCounter {
 private:
-  std::vector<std::string> allWords;
-  std::vector<unsigned int> letterCounts;
-  unsigned int totalLetterCount = 0;
+  std::vector<std::string> _allWords;
+  std::vector<unsigned int> _letterCounts;
+  unsigned int _totalLetterCount = 0;
 
 public:
   StringCounter();
   ~StringCounter();
   void readAllWords(std::istream &, std::string);
-  void printLetterCount(std::ostream &);
-  void printLetterStats(std::ostream &);
-  std::vector<std::string> getAllWords();
+  const void printLetterCounts(std::ostream &);
+  const void printLetterStats(std::ostream &);
+  const std::vector<std::string> getAllWords();
 };
+
+#endif // STRINGCOUNTER_H
