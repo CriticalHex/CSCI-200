@@ -1,0 +1,18 @@
+TARGET = main.exe
+SRC_FILES = main.cpp
+
+OBJECTS = $(SRC_FILES:.cpp=.o)
+
+INCLUDE_PATH = -I"C:\Users\HADPublic\code\SFML-2.6.0\include"
+
+LIBS = -lsfml-graphics -lsfml-window -lsfml-system
+LIB_PATH = -L"C:\Users\HADPublic\code\SFML-2.6.0\build\libs"
+CXX := g++
+
+all: $(TARGET)
+
+$(TARGET): $(OBJECTS)
+	@$(CXX) -o $@ $^ $(LIB_PATH) $(LIBS)
+
+%.o: %.cpp
+	@$(CXX) -c $< -o $@ $(INCLUDE_PATH)
