@@ -3,7 +3,7 @@
         {
             "type": "cppbuild",
             "label": "C/C++: g++.exe build active file",
-            "command": "C:\\mingw64\\bin\\mingw32-make.exe",
+            "command": "C:\\mingw64\\bin\\make.exe",
             "args": [],
             "options": {
                 "cwd": "${fileDirname}"
