@@ -1,5 +1,5 @@
 TARGET = A4.exe
-SRC_FILES = main.cpp Bubble.cpp
+SRC_FILES = main.cpp Bubble.cpp Circle.cpp
 
 OBJECTS = $(SRC_FILES:.cpp=.o)
 
@@ -30,3 +30,4 @@ run:
 
 main.o: main.cpp
 Bubble.o: Bubble.h Bubble.cpp
+Circle.o: Circle.h Circle.cpp

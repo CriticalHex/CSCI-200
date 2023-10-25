@@ -10,24 +10,24 @@ float pi = 3.14159265358979;
 class Circle {
 public:
   sf::Vector2f _pos;
-  sf::VertexArray vertexes;
+  sf::VertexArray vertices;
 
   Circle(sf::Vector2f pos, float radius) { // constructor
     _pos = pos;
 
-    vertexes.setPrimitiveType(sf::PrimitiveType::TriangleFan);
-    vertexes.append(
+    vertices.setPrimitiveType(sf::PrimitiveType::TriangleFan);
+    vertices.append(
         sf::Vertex(sf::Vector2f(_pos.x - radius / 3, _pos.y - radius / 2),
                    sf::Color::White));
 
     for (int i = 0; ++i <= 361;) {
-      vertexes.append(
+      vertices.append(
           sf::Vertex(sf::Vector2f(radius * cos(i * pi / 180) + _pos.x,
                                   radius * sin(i * pi / 180) + _pos.y),
                      sf::Color::Green));
     }
   }
-  void draw(sf::RenderWindow &window) { window.draw(vertexes); }
+  void draw(sf::RenderWindow &window) { window.draw(vertices); }
 
   void setColor() {
     // vertexes[0].color = sf::Color(rand(), rand(), rand());
