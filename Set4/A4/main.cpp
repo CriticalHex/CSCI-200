@@ -51,6 +51,8 @@ int main(int argc, char **argv) {
 
   vector<Bubble *> bubbles;
   vector<thread> threads;
+  uint16_t maxThreads = 12;
+  uint64_t step = 0, start, stop;
 
   // uint32_t start;
   // uint32_t stop;
@@ -60,7 +62,7 @@ int main(int argc, char **argv) {
     offset = sf::Vector2i(1920, 0);
     int max_width = window.getSize().x - 51;  // don't want to spawn in wall
     int max_height = window.getSize().y - 51; // don't want to spawn in cieling
-    for (int i = 0; ++i < 20000;) {
+    for (int i = 0; ++i < 500;) {
       bubbles.push_back(
           create_random_bubble(randvec(51, max_width, 51, max_height)));
     }
@@ -88,8 +90,6 @@ int main(int argc, char **argv) {
       }
 
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        if (bubbles.size() != 0)
-          delete bubbles.at(bubbles.size() - 1);
         bubbles.pop_back();
       }
 
@@ -99,15 +99,13 @@ int main(int argc, char **argv) {
       }
     }
 
-    // for (int i = 0; i < 1; i++) {
-    //   start = 0;
-    //   stop = bubbles.size();
-    threads.emplace_back(update_bubbles, ref(bubbles), 0, bubbles.size() / 2,
-                         window.getSize(), sf::Mouse::getPosition() + offset);
-    threads.emplace_back(update_bubbles, ref(bubbles), bubbles.size() / 2 + 1,
-                         bubbles.size(), window.getSize(),
-                         sf::Mouse::getPosition() + offset);
-    // }
+    step = bubbles.size() / maxThreads;
+    for (int i = 0; i < maxThreads; i++) {
+      start = step * i;
+      stop = i != maxThreads - 1 ? step * (i + 1) : bubbles.size();
+      threads.emplace_back(update_bubbles, ref(bubbles), start, stop,
+                           window.getSize(), sf::Mouse::getPosition() + offset);
+    }
 
     for (auto &t : threads) {
       if (t.joinable()) {

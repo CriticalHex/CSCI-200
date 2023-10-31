@@ -1,7 +1,14 @@
 #include "Circle.h"
 #include <cmath>
+#include <random>
 
 using namespace std;
+
+int _randint(const int MIN, const int MAX) {
+  const int RANDOM = MIN + (rand() % (MAX - MIN + 1));
+  // the +1 is to allow the max number to be generated
+  return RANDOM;
+}
 
 Circle::Circle() {
   vertices.setPrimitiveType(sf::PrimitiveType::TriangleFan);
@@ -30,11 +37,12 @@ void Circle::createVertices() {
       sf::Vertex(sf::Vector2f(_pos.x - _radius / 3, _pos.y - _radius / 2),
                  sf::Color(255, 255, 255, _alpha)));
 
-  for (int i = 0; ++i <= 361;) {
-    vertices.append(
-        sf::Vertex(sf::Vector2f(_radius * cos(i * pi / 180) + _pos.x,
-                                _radius * sin(i * pi / 180) + _pos.y),
-                   _color));
+  int count = _randint(3, 20);
+  for (int i = 0; ++i <= count + 1;) {
+    vertices.append(sf::Vertex(
+        sf::Vector2f(_radius * cos((i * pi / 180) * 360 / count) + _pos.x,
+                     _radius * sin((i * pi / 180) * 360 / count) + _pos.y),
+        _color));
   }
 }
 void Circle::draw(sf::RenderWindow &window) { window.draw(vertices); }
