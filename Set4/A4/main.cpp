@@ -1,3 +1,14 @@
+/**
+ * @file main.cpp
+ * @author KYLE KUBASKA
+ * @brief  I'm sorry for how overkill this is! My roommates had lots of suggestions. Hopefully you don't mind the
+ * random polygons, it's easy to turn that off by changing the random range in
+ * the cpp file. To activate the screensaver portion (spans three monitors and
+ * has 50000 "bubbles") run "./A4.exe screensaver" The only "help" I got on this
+ * was Dr. Paone confirming that my threads were set up correctly
+ *
+ */
+
 #include "Bubble.h"
 #include <SFML\Graphics.hpp>
 #include <ctime>
@@ -62,7 +73,7 @@ int main(int argc, char **argv) {
     offset = sf::Vector2i(1920, 0);
     int max_width = window.getSize().x - 51;  // don't want to spawn in wall
     int max_height = window.getSize().y - 51; // don't want to spawn in cieling
-    for (int i = 0; ++i < 500;) {
+    for (int i = 0; ++i < 50000;) {
       bubbles.push_back(
           create_random_bubble(randvec(51, max_width, 51, max_height)));
     }

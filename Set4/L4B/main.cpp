@@ -1,62 +1,31 @@
-#include <SFML\Graphics.hpp>
-#include <ctime>
+#include "Warehouse.hpp"
+
 #include <iostream>
-#include <math.h>
-#include <random>
-#include <vector>
-
-float pi = 3.14159265358979;
-
-class Circle {
-public:
-  sf::Vector2f _pos;
-  sf::VertexArray vertices;
-
-  Circle(sf::Vector2f pos, float radius) { // constructor
-    _pos = pos;
-
-    vertices.setPrimitiveType(sf::PrimitiveType::TriangleFan);
-    vertices.append(
-        sf::Vertex(sf::Vector2f(_pos.x - radius / 3, _pos.y - radius / 2),
-                   sf::Color::White));
-
-    for (int i = 0; ++i <= 361;) {
-      vertices.append(
-          sf::Vertex(sf::Vector2f(radius * cos(i * pi / 180) + _pos.x,
-                                  radius * sin(i * pi / 180) + _pos.y),
-                     sf::Color::Green));
-    }
-  }
-  void draw(sf::RenderWindow &window) { window.draw(vertices); }
-
-  void setColor() {
-    // vertexes[0].color = sf::Color(rand(), rand(), rand());
-  }
-};
+#include <string>
+using namespace std;
 
 int main() {
-  srand(time(NULL));
+  cout << "Made Warehouse H with 2 boxes" << endl;
+  Warehouse<Box> warehouseH;
+  warehouseH.store(Box(4));
+  warehouseH.store(Box(2));
+  cout << "H: " << warehouseH << endl;
 
-  sf::RenderWindow window(sf::VideoMode(1920, 1080), "Squares",
-                          sf::Style::Fullscreen);
-  window.setFramerateLimit(60);
+  cout << endl << "Setting Box 0 to size 5" << endl;
+  warehouseH.retrieve(0).setBoxSize(5);
+  cout << "H: " << warehouseH << endl;
 
-  Circle shape(1920 / 2, 1080 / 2, 250);
+  cout << endl << "Made Warehouse C with 3 strings" << endl;
+  Warehouse<string> warehouseC;
+  warehouseC.store("This");
+  warehouseC.store("Is");
+  warehouseC.store("template");
+  cout << "C: " << warehouseC << endl;
 
-  while (window.isOpen()) {
-    // Process events-------------------------------------------
-    sf::Event event;
-    while (window.pollEvent(event)) {
-      // Close window: exit-----------------------------------
-      if (event.type == sf::Event::Closed)
-        window.close();
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-        window.close();
-      }
-    }
+  cout << endl << "Manipulating strings 1 and 2" << endl;
+  warehouseC.retrieve(1) = "is";
+  warehouseC.retrieve(2) += "d.";
+  cout << "C: " << warehouseC << endl;
 
-    window.clear();
-    shape.draw(window);
-    window.display();
-  }
+  return 0;
 }

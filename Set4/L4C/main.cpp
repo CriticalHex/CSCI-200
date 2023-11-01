@@ -1,3 +1,10 @@
+/*
+
+KYLE KUBASKA
+NO HELP NECESSARY
+
+*/
+
 #include <SFML/Graphics.hpp>
 
 using namespace std;
