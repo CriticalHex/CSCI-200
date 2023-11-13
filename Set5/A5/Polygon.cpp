@@ -23,5 +23,3 @@ double Polygon::getSideLength(uint16_t idx1, uint16_t idx2) {
       sqrt(pow(_vertices[idx1].position.x - _vertices[idx2].position.x, 2) +
            pow(_vertices[idx1].position.y - _vertices[idx2].position.y, 2)));
 }
-
-bool Polygon::validate() { return false; }

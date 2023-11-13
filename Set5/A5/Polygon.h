@@ -28,7 +28,7 @@ public:
 
   // function that returns true if the set coordinates form the
   // intended polygon
-  virtual bool validate();
+  virtual bool validate() = 0;
 
   double getSideLength(uint16_t, uint16_t);
 
