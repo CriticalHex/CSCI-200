@@ -1,26 +1,48 @@
-TARGET = L5A.exe
-SRC_FILES = main.cpp
+# A line starting with a has is a comment, we'll build up
+# the below example
+
+TARGET = L5A
+SRC_FILES = main.cpp Room.cpp GuessTheNumberRoom.cpp ExitRoom.cpp
+
+# NO EDITS NEEDED BELOW THIS LINE
+
+CXX = g++
+CXXFLAGS = -Wall -Wextra -Werror -pedantic-errors
+CXXFLAGS_DEBUG = -g
+CXXVERSION = -std=c++17
 
 OBJECTS = $(SRC_FILES:.cpp=.o)
 
-INCLUDE_PATH = -I"C:\mingw64\include"
-
-LIBS = -lsfml-graphics -lsfml-window -lsfml-system
-LIB_PATH = -L"C:\mingw64\include\libs"
-CXX = g++
+ifeq ($(shell echo "Windows"), "Windows")
+	TARGET := $(TARGET).exe
+	DEL = del
+	Q=
+else
+	DEL = rm -f
+	Q="
+endif
 
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
-	@$(CXX) -o $@ $^ $(LIB_PATH) $(LIBS)
+	$(CXX) -o $@ $^
 
-%.o: %.cpp
-	@$(CXX) -c $< -o $@ $(INCLUDE_PATH)
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(CXXVERSION) $(CXXFLAGS_DEBUG) -o $@ -c $<
 
 clean:
-	@$(RM) $(OBJECTS) $(TARGET)
+	$(DEL) $(TARGET) $(OBJECTS) Makefile.bak
 
-run:
-	@$(TARGET)
+depend:
+	@sed -i.bak '/^# DEPENDENCIES/,$$d' Makefile
+	@$(DEL) sed*
+	@echo $(Q)# DEPENDENCIES$(Q) >> Makefile
+	@$(CXX) -MM $(SRC_FILES) >> Makefile
 
-.PHONY: clean run
+.PHONY: all clean depend
+
+# DEPENDENCIES
+main.o: main.cpp GuessTheNumberRoom.h Room.h ExitRoom.h
+Room.o: Room.cpp Room.h
+GuessTheNumberRoom.o: GuessTheNumberRoom.cpp GuessTheNumberRoom.h Room.h
+ExitRoom.o: ExitRoom.cpp ExitRoom.h Room.h
