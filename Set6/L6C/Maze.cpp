@@ -53,13 +53,13 @@ void Maze::create(string filename) {
           break;
         }
         case 'S': { // start
-          _startPos = sf::Vector2u(j, i);
+          _startIndex = sf::Vector2u(j, i);
           room.setFlags(1, 1);
           rect.setFillColor(sf::Color::Green);
           break;
         }
         case 'E': { // end
-          _endPos = sf::Vector2u(j, i);
+          _endIndex = sf::Vector2u(j, i);
           room.setFlags(1, 0, 1);
           rect.setFillColor(sf::Color::Red);
           break;

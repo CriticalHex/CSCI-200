@@ -8,7 +8,7 @@ class Maze {
 private:
   std::vector<std::vector<Room>> _rooms;
   uint16_t _width, _height;
-  sf::Vector2u _startPos, _endPos;
+  sf::Vector2u _startIndex, _endIndex;
   sf::Vector2f _roomSize;
 
 public:

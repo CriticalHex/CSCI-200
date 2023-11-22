@@ -8,7 +8,7 @@ class Maze {
 private:
   std::vector<std::vector<Room *>> _rooms;
   uint16_t _width, _height;
-  sf::Vector2u _startPos, _endPos;
+  Room *_start, *_end;
   sf::Vector2f _roomSize;
 
 public:
@@ -17,8 +17,8 @@ public:
   ~Maze();
   sf::Vector2f getRoomSize() const;
   sf::Vector2u getMazeSize() const;
-  sf::Vector2u getStartPos() const;
-  sf::Vector2u getEndPos() const;
+  Room *getStartRoom() const;
+  Room *getEndRoom() const;
   void draw(sf::RenderWindow &window);
   void create(std::string filename);
   void addAdjacencies();

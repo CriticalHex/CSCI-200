@@ -20,10 +20,6 @@ sf::Vector2u Maze::getMazeSize() const {
   return sf::Vector2u(_roomSize.x * _width, _roomSize.y * _height);
 }
 
-sf::Vector2u Maze::getStartPos() const { return _startPos; }
-
-sf::Vector2u Maze::getEndPos() const { return _endPos; }
-
 void Maze::draw(sf::RenderWindow &window) {
   for (auto row : _rooms) {
     for (Room *room : row) {
@@ -59,13 +55,13 @@ void Maze::create(string filename) {
           break;
         }
         case 'S': { // start
-          _startPos = sf::Vector2u(j, i);
+          _start = room;
           room->setFlags(1, 1);
           rect.setFillColor(sf::Color::Green);
           break;
         }
         case 'E': { // end
-          _endPos = sf::Vector2u(j, i);
+          _end = room;
           room->setFlags(1, 0, 1);
           rect.setFillColor(sf::Color::Red);
           break;
@@ -97,6 +93,9 @@ void Maze::addAdjacencies() {
     }
   }
 }
+
+Room *Maze::getStartRoom() const { return _start; }
+Room *Maze::getEndRoom() const { return _end; }
 
 Maze::~Maze() {
   for (auto row : _rooms) {
