@@ -21,6 +21,7 @@ public:
   void breadthFirstSearch();
   void depthFirstSearch();
   void markUncheckedRooms();
+  void highlightPath();
 };
 
 #endif

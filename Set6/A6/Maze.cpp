@@ -23,8 +23,6 @@ sf::Vector2u Maze::getMazeSize() const {
 void Maze::draw(sf::RenderWindow &window) {
   for (auto row : _rooms) {
     for (Room *room : row) {
-      if (room->traversable && room->visited && !room->start && !room->end)
-        room->rect.setFillColor(sf::Color::Magenta);
       window.draw(room->rect);
     }
   }

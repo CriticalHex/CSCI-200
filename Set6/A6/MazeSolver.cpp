@@ -18,7 +18,7 @@ MazeSolver::MazeSolver(int argc, char **argv) {
   maze.addAdjacencies();
   _queue.push(maze.getStartRoom());
   _stack.push(maze.getStartRoom());
-  maze.getStartRoom()->visited = true;
+  maze.getStartRoom()->visit();
   if (_method == "") {
     cout << "How would you like to solve the maze? ('BFS'/'DFS'): ";
     cin >> _method;
@@ -32,21 +32,26 @@ void MazeSolver::solve() {
     breadthFirstSearch();
   else if (_method == "DFS")
     depthFirstSearch();
-  if (_solved)
+  if (_solved) {
     markUncheckedRooms();
+    highlightPath();
+  }
 }
 
 void MazeSolver::breadthFirstSearch() {
   for (auto room : _queue.front()->adjacentRooms) {
-    if (room->traversable) {
-      if (room->end) {
-        room->visited = true;
+    if (room->isTraversable()) {
+      if (room->isEnd()) {
+        room->parent = _queue.front();
+        room->visit();
         _solved = true;
         return;
       }
-      if (!room->visited)
+      if (!room->isVisited()) {
         _queue.push(room);
-      room->visited = true;
+        room->visit();
+        room->parent = _queue.front();
+      }
     }
   }
   _queue.pop();
@@ -55,16 +60,17 @@ void MazeSolver::breadthFirstSearch() {
 
 void MazeSolver::depthFirstSearch() {
   Room *top = _stack.top();
-  top->visited = true;
+  top->visit();
   _stack.pop();
-  if (top->end) {
+  if (top->isEnd()) {
     top = nullptr;
     _solved = true;
     return;
   }
   for (auto room : top->adjacentRooms) {
-    if (room->traversable && !room->visited) {
+    if (room->isTraversable() && !room->isVisited()) {
       _stack.push(room);
+      room->parent = top;
     }
   }
   top = nullptr;
@@ -76,7 +82,7 @@ void MazeSolver::markUncheckedRooms() {
   if (_method == "BFS") {
     for (int i = 0; i < _queue.size(); i++) {
       room = _queue.front();
-      if (!room->visited)
+      if (!room->isVisited())
         room->rect.setFillColor(sf::Color::Blue);
       _queue.pop();
     }
@@ -84,7 +90,8 @@ void MazeSolver::markUncheckedRooms() {
     int leftOver = _stack.size();
     for (int i = 0; i < leftOver; i++) {
       room = _stack.top();
-      room->rect.setFillColor(sf::Color::Blue);
+      if (!room->isVisited())
+        room->rect.setFillColor(sf::Color::Blue);
       _stack.pop();
     }
   }
@@ -92,3 +99,12 @@ void MazeSolver::markUncheckedRooms() {
 }
 
 bool MazeSolver::isSolved() const { return _solved; }
+
+void MazeSolver::highlightPath() {
+  Room *root = maze.getEndRoom()->parent;
+  while (root != nullptr) {
+    if (root->isVisited() && !root->isStart())
+      root->rect.setFillColor(sf::Color::Yellow);
+    root = root->parent;
+  }
+}
