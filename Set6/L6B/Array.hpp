@@ -21,10 +21,12 @@ public:
   T max() const override;
   int find(const T VALUE) const override;
   void sort() override;
-  void mergeSort(T *arr, int start, int stop);
-  void merge(T *leftArray, T *rightArray, int leftLength, int rightLength);
+  int search(const T VALUE) const override;
 
 private:
+  void mergeSort(T *arr, int start, int stop);
+  void merge(T *mergedArray, T *leftArray, T *rightArray, int leftLength,
+             int rightLength);
   int _size;
   T *_pArray;
 };
@@ -149,43 +151,82 @@ template <typename T> int Array<T>::find(const T VALUE) const {
   return -1;
 }
 
-template <typename T> void Array<T>::sort() { mergeSort(); }
+template <typename T> void Array<T>::sort() {
+  mergeSort(_pArray, 0, _size - 1);
+}
 
 template <typename T>
-void Array<T>::merge(T *leftArray, T *rightArray, int leftLength,
-                     int rightLength) {
-  int leftIndex = 0, rightIndex = 0;
+void Array<T>::merge(T *mergedArray, T *leftArray, T *rightArray,
+                     int leftLength, int rightLength) {
+  int leftIndex = 0, rightIndex = 0, mergedIndex = 0;
   while (leftIndex < leftLength && rightIndex < rightLength) {
-    if (leftArray)
+    if (leftArray[leftIndex] < rightArray[rightIndex]) {
+      mergedArray[mergedIndex] = leftArray[leftIndex];
+      leftIndex++;
+    } else {
+      mergedArray[mergedIndex] = rightArray[rightIndex];
+      rightIndex++;
+    }
+    mergedIndex++;
+  }
+  for (int i = leftIndex; i < leftLength; i++) {
+    mergedArray[mergedIndex] = leftArray[i];
+    mergedIndex++;
+  }
+  for (int i = rightIndex; i < rightLength; i++) {
+    mergedArray[mergedIndex] = rightArray[i];
+    mergedIndex++;
   }
 }
 
 template <typename T>
-void Array<T>::mergeSort(T *arr, int startIndex, int stopIndex) {
+void Array<T>::mergeSort(T *array, int startIndex, int stopIndex) {
   // stopIndex should be an accesible index, not indicative of a range UP TO
   // stop index. This will hold true of middleIndex as well.
   if (startIndex >= stopIndex)
     return;
   int middleIndex = startIndex + (stopIndex - startIndex) / 2;
-  mergeSort(arr, startIndex, middleIndex);
-  mergeSort(arr, middleIndex + 1, stopIndex);
-  // an array of 3 elements, start = 1, stop = 3 thus mid 1.
-  // left array would include mid, len 1, and right array would contain mid + 1
-  // through stop, len 2.
-  // an array of 40 elements, start = 0, stop = 39 thus mid 19.
-  // left array would include up to mid index, len 20, and right array
-  // would contain mid + 1 through stop, len 20
-  int leftLength =
-      middleIndex - startIndex + 1;          // 19 - 0 + 1 = 20, 1 - 1 + 1 = 1.
-  int rightLength = stopIndex - middleIndex; // 39 - 19 = 20, 3 - 1 = 2.
+
+  mergeSort(array, startIndex, middleIndex);
+  mergeSort(array, middleIndex + 1, stopIndex);
+
+  int leftLength = middleIndex - startIndex + 1;
+  int rightLength = stopIndex - middleIndex;
   T *leftArray = new T[leftLength], *rightArray = new T[rightLength];
   for (int i = 0; i < leftLength; i++) {
-    leftArray[i] = arr[startIndex + i];
+    leftArray[i] = array[startIndex + i];
   }
   for (int i = 0; i < rightLength; i++) {
-    rightArray[i] = arr[middleIndex + 1 + i];
+    rightArray[i] = array[middleIndex + 1 + i];
   }
-  merge()
+  T *mergedArray = new T[stopIndex - startIndex + 1];
+
+  merge(mergedArray, leftArray, rightArray, leftLength, rightLength);
+
+  for (int i = startIndex; i <= stopIndex; i++) {
+    array[i] = mergedArray[i - startIndex];
+  }
+
+  delete[] leftArray;
+  delete[] rightArray;
+  delete[] mergedArray;
+}
+
+template <typename T> int Array<T>::search(const T VALUE) const {
+  int left = 0, right = _size - 1, middle;
+  while (left <= right) {
+    middle = left + (right - left) / 2;
+    if (_pArray[middle] == VALUE)
+      return middle;
+    if (_pArray[middle] < VALUE)
+      // shift range to above the middle
+      left = middle + 1;
+    else
+      // shift range to below the middle
+      right = middle - 1;
+  }
+  // not found
+  return -1;
 }
 
 #endif // ARRAY_H

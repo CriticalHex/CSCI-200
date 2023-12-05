@@ -80,6 +80,8 @@ public:
   virtual int find(const T VALUE) const = 0;
 
   virtual void sort() = 0;
+
+  virtual int search(const T VALUE) const = 0;
 };
 
 #endif // LIST_H

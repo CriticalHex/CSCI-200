@@ -15,13 +15,19 @@ public:
   int size() const override;
   T get(const int POS) const override;
   void set(const int POS, const T VALUE) override;
-  void insert(const int POS, const T VALUE) override;
-  void remove(const int POS) override;
+  void insert(int pos, const T VALUE) override;
+  void remove(int pos) override;
   T min() const override;
   T max() const override;
   int find(const T VALUE) const override;
+  void sort() override;
+  void fill(const int LENGTH, const T VALUE);
+  int search(const T VALUE) const override;
 
 private:
+  void mergeSort(LinkedList<T> *linkedList, int startIndex, int stopIndex);
+  void merge(LinkedList<T> *mergedList, LinkedList<T> *leftList,
+             LinkedList<T> *rightList);
   struct Node {
     T value;
     Node *pNext;
@@ -61,7 +67,7 @@ template <typename T> int LinkedList<T>::size() const { return _size; }
 template <typename T> T LinkedList<T>::get(const int POS) const {
   // if POS is out of range, throw std::out_of_range exception
   if (POS >= _size || POS < 0)
-    throw std::out_of_range("OUT OF RANGE");
+    throw std::out_of_range("GET: OUT OF RANGE");
   Node *node = _pHead;
   if (_size / 2 > POS) {
     // advance current node to POS
@@ -81,7 +87,7 @@ template <typename T> T LinkedList<T>::get(const int POS) const {
 template <typename T> void LinkedList<T>::set(const int POS, const T VALUE) {
   // if POS is out of range, throw std::out_of_range exception
   if (POS >= _size || POS < 0)
-    throw std::out_of_range("OUT OF RANGE");
+    throw std::out_of_range("SET: OUT OF RANGE");
   // set current node to head
   Node *node = _pHead;
   if (_size / 2 > POS) {
@@ -281,6 +287,84 @@ template <typename T> int LinkedList<T>::find(const T VALUE) const {
   }
   // otherwise return -1
   return -1;
+}
+
+template <typename T> void LinkedList<T>::sort() {
+  mergeSort(this, 0, _size - 1);
+}
+
+template <typename T>
+void LinkedList<T>::fill(const int LENGTH, const T VALUE) {
+  if (_pHead != nullptr)
+    throw std::out_of_range("LIST WAS NOT EMPTY");
+  for (int i = 0; i < LENGTH; i++) {
+    insert(0, VALUE);
+  }
+}
+
+template <typename T>
+void LinkedList<T>::mergeSort(LinkedList<T> *linkedList, int startIndex,
+                              int stopIndex) {
+  if (startIndex >= stopIndex)
+    return;
+  int middleIndex = startIndex + (stopIndex - startIndex) / 2;
+
+  mergeSort(linkedList, startIndex, middleIndex);
+  mergeSort(linkedList, middleIndex + 1, stopIndex);
+
+  int leftLength = middleIndex - startIndex + 1;
+  int rightLength = stopIndex - middleIndex;
+  LinkedList<T> *leftList = new LinkedList<T>(),
+                *rightList = new LinkedList<T>(),
+                *mergedList = new LinkedList<T>();
+  leftList->fill(leftLength, T());
+  rightList->fill(rightLength, T());
+  mergedList->fill(linkedList->size(), T());
+  for (int i = 0; i < leftLength; i++) {
+    leftList->set(i, linkedList->get(startIndex + i));
+  }
+  for (int i = 0; i < rightLength; i++) {
+    rightList->set(i, linkedList->get(middleIndex + 1 + i));
+  }
+
+  merge(mergedList, leftList, rightList);
+
+  for (int i = startIndex; i <= stopIndex; i++) {
+    linkedList->set(i, mergedList->get(i - startIndex));
+  }
+
+  delete leftList;
+  delete rightList;
+  delete mergedList;
+}
+
+template <typename T>
+void LinkedList<T>::merge(LinkedList<T> *mergedList, LinkedList<T> *leftList,
+                          LinkedList<T> *rightList) {
+  int leftIndex = 0, rightIndex = 0, mergedIndex = 0,
+      leftLength = leftList->size(), rightLength = rightList->size();
+  while (leftIndex < leftLength && rightIndex < rightLength) {
+    if (leftList->get(leftIndex) < rightList->get(rightIndex)) {
+      mergedList->set(mergedIndex, leftList->get(leftIndex));
+      leftIndex++;
+    } else {
+      mergedList->set(mergedIndex, rightList->get(rightIndex));
+      rightIndex++;
+    }
+    mergedIndex++;
+  }
+  for (int i = leftIndex; i < leftLength; i++) {
+    mergedList->set(mergedIndex, leftList->get(i));
+    mergedIndex++;
+  }
+  for (int i = rightIndex; i < rightLength; i++) {
+    mergedList->set(mergedIndex, rightList->get(i));
+    mergedIndex++;
+  }
+}
+
+template <typename T> int LinkedList<T>::search(const T VALUE) const {
+  return find(VALUE);
 }
 
 #endif // LINKED_LIST_H
