@@ -1,5 +1,13 @@
-
-
+#include <iostream>
 using namespace std;
 
-int main() { return 0; }
+#include "Array.hpp"
+#include "LinkedList.hpp"
+
+int main() {
+  Array<int> arr;
+  LinkedList<int> list;
+  cout << "Testing array: ";
+
+  return 0;
+}
